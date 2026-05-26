@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafePrompt Lab</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<main class="shell">
+    <section class="hero">
+        <p class="eyebrow">Prompt Injection Safety Workbench</p>
+        <h1>Stress-test prompts before they stress-test your app.</h1>
+        <p class="lede">
+            Analyze prompts with a configurable detection policy, inspect risky signals, and iterate on defenses
+            without leaving the browser.
+        </p>
+    </section>
+
+    <section class="panel composer">
+        <form th:action="@{/analyze}" th:object="${promptForm}" method="post">
+            <label class="label" for="prompt">Prompt under test</label>
+            <textarea id="prompt" th:field="*{prompt}" rows="12"
+                      placeholder="Paste a prompt or a full conversation transcript..."></textarea>
+            <p class="error" th:if="${#fields.hasErrors('prompt')}" th:errors="*{prompt}"></p>
+            <button type="submit">Analyze Prompt</button>
+        </form>
+    </section>
+
+    <section class="panel report" th:if="${report != null}">
+        <div class="report-header">
+            <div>
+                <p class="label">Overall risk</p>
+                <h2 th:text="${report.overallRisk()}">HIGH</h2>
+                <p class="meta" th:text="'Scan #' + ${report.id()} + ' • ' + ${#temporals.format(report.analyzedAt(), 'dd MMM yyyy HH:mm')}">Scan metadata</p>
+            </div>
+            <div class="score">
+                <span th:text="${report.riskScore()}">0</span>
+                <small>/ 100</small>
+            </div>
+        </div>
+
+        <div class="findings" th:if="${!#lists.isEmpty(report.findings())}">
+            <article class="finding" th:each="finding : ${report.findings()}">
+                <div class="finding-topline">
+                    <h3 th:text="${finding.detectorName()}">Detector</h3>
+                    <span class="badge" th:text="${finding.severity()}">MEDIUM</span>
+                </div>
+                <p class="rule-id" th:text="'Rule: ' + ${finding.ruleId()}">Rule</p>
+                <p th:text="${finding.message()}">Detected suspicious signals.</p>
+                <p class="remediation" th:text="${finding.remediation()}">Remediation</p>
+            </article>
+        </div>
+
+        <p class="safe-state" th:if="${#lists.isEmpty(report.findings())}">
+            No obvious prompt injection patterns were detected by the active policy.
+        </p>
+
+        <div class="llm-review" th:if="${report.llmReview() != null}">
+            <div class="history-header">
+                <div>
+                    <p class="label">LLM second pass</p>
+                    <h3 th:text="${report.llmReview().status()}">DISABLED</h3>
+                </div>
+                <p class="meta" th:text="${report.llmReview().provider()} + ' • ' + ${report.llmReview().model()}">Provider</p>
+            </div>
+
+            <p class="meta"
+               th:if="${report.llmReview().status().name() == 'COMPLETED'}"
+               th:text="'Model risk: ' + ${report.llmReview().assessedRisk()} + ' • Confidence: ' + ${report.llmReview().confidence()}">Model assessment</p>
+
+            <p th:if="${report.llmReview().summary() != null}" th:text="${report.llmReview().summary()}">LLM summary</p>
+            <p class="error" th:if="${report.llmReview().errorMessage() != null}" th:text="${report.llmReview().errorMessage()}">LLM error</p>
+
+            <div class="llm-columns" th:if="${report.llmReview().status().name() == 'COMPLETED'}">
+                <div>
+                    <p class="label">Signals</p>
+                    <ul class="plain-list">
+                        <li th:each="signal : ${report.llmReview().signals()}" th:text="${signal}">Signal</li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="label">Recommended actions</p>
+                    <ul class="plain-list">
+                        <li th:each="action : ${report.llmReview().recommendedActions()}" th:text="${action}">Action</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel history" th:if="${recentScans != null}">
+        <div class="history-header">
+            <div>
+                <p class="label">Recent scans</p>
+                <h2>Memory for your safety lab</h2>
+            </div>
+            <p class="lede compact">Each analysis is stored locally in H2 so you can review patterns across sessions.</p>
+        </div>
+
+        <div class="history-grid" th:if="${!#lists.isEmpty(recentScans)}">
+            <article class="history-card" th:each="scan : ${recentScans}">
+                <div class="finding-topline">
+                    <h3 th:text="'#' + ${scan.id()}">#1</h3>
+                    <span class="badge" th:text="${scan.overallRisk()}">MEDIUM</span>
+                </div>
+                <p class="rule-id" th:text="${#temporals.format(scan.analyzedAt(), 'dd MMM yyyy HH:mm')}">Timestamp</p>
+                <p th:text="${scan.promptPreview()}">Prompt preview</p>
+                <p class="meta" th:text="${scan.riskScore()} + '/100 • ' + ${scan.findingCount()} + ' findings • LLM ' + ${scan.llmReviewStatus()}">Risk summary</p>
+            </article>
+        </div>
+
+        <p class="safe-state" th:if="${#lists.isEmpty(recentScans)}">
+            No scans saved yet. Run your first prompt to build history.
+        </p>
+    </section>
+</main>
+</body>
+</html>
