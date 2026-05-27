@@ -1,0 +1,64 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/safeprompt-db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  thymeleaf:
+    cache: false
+
+prompt-safety:
+  llm:
+    enabled: false
+    provider: openai
+    model: gpt-4.1
+    api-key: ${OPENAI_API_KEY:}
+    endpoint: https://api.openai.com/v1/responses
+    reasoning-effort: low
+    timeout-ms: 20000
+  detectors:
+    - id: instruction-override
+      name: Instruction Override Detector
+      severity: HIGH
+      remediation: Separate trusted system instructions from user input and reject override-like phrases.
+      patterns:
+        - 'ignore( all)? (previous|prior) instructions'
+        - 'disregard( all)? (earlier|previous) instructions'
+        - 'forget( all)? (prior|previous) (directions|instructions)'
+        - 'override( the)? system prompt'
+    - id: secret-exfiltration
+      name: Secret Exfiltration Detector
+      severity: CRITICAL
+      remediation: Block requests for secrets, hidden prompts, and credentials before they reach the model.
+      patterns:
+        - 'reveal( the)?( hidden)? system prompt'
+        - 'show( the)? hidden instructions'
+        - '(print|output|show).*(api key|token|secret|credentials)'
+        - 'leak credentials'
+    - id: role-confusion
+      name: Role Confusion Detector
+      severity: MEDIUM
+      remediation: Treat role-changing requests as untrusted content unless explicitly allowed by product logic.
+      patterns:
+        - 'you are now( the)? system'
+        - 'act as( the)? developer'
+        - 'switch your role'
+        - 'pretend to be( the)? system'
+    - id: delimiter-smuggling
+      name: Delimiter Smuggling Detector
+      severity: MEDIUM
+      remediation: Normalize or escape untrusted delimiters before combining user content with trusted prompt sections.
+      patterns:
+        - '<system>'
+        - '</system>'
+        - '```system'
+        - '\[\[system]]'
+        - '### instruction ###'

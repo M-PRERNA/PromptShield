@@ -1,0 +1,58 @@
+{
+  "groups": [
+    {
+      "name": "prompt-safety",
+      "type": "com.safeprompt.config.PromptPolicyProperties",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties"
+    },
+    {
+      "name": "prompt-safety.llm",
+      "type": "com.safeprompt.config.PromptPolicyProperties$LlmPolicy",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties",
+      "sourceMethod": "public com.safeprompt.config.PromptPolicyProperties.LlmPolicy getLlm() "
+    }
+  ],
+  "properties": [
+    {
+      "name": "prompt-safety.detectors",
+      "type": "java.util.List<com.safeprompt.config.PromptPolicyProperties$DetectorPolicy>",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties"
+    },
+    {
+      "name": "prompt-safety.llm.api-key",
+      "type": "java.lang.String",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties$LlmPolicy"
+    },
+    {
+      "name": "prompt-safety.llm.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties$LlmPolicy"
+    },
+    {
+      "name": "prompt-safety.llm.endpoint",
+      "type": "java.lang.String",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties$LlmPolicy"
+    },
+    {
+      "name": "prompt-safety.llm.model",
+      "type": "java.lang.String",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties$LlmPolicy"
+    },
+    {
+      "name": "prompt-safety.llm.provider",
+      "type": "java.lang.String",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties$LlmPolicy"
+    },
+    {
+      "name": "prompt-safety.llm.reasoning-effort",
+      "type": "java.lang.String",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties$LlmPolicy"
+    },
+    {
+      "name": "prompt-safety.llm.timeout-ms",
+      "type": "java.lang.Integer",
+      "sourceType": "com.safeprompt.config.PromptPolicyProperties$LlmPolicy"
+    }
+  ],
+  "hints": []
+}
