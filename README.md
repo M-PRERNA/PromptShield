@@ -5,6 +5,9 @@
 PromptShield is a Java + Spring Boot application designed to analyze prompts for potential prompt-injection attacks and unsafe LLM interactions.
 
 <img width="992" height="822" alt="image" src="https://github.com/user-attachments/assets/e1677065-e6e2-4dd9-9901-941d6449ece3" />
+<img width="1014" height="618" alt="image" src="https://github.com/user-attachments/assets/ed275d32-0d80-446e-a447-e4b602ea9604" />
+<img width="996" height="827" alt="image" src="https://github.com/user-attachments/assets/37bd3d6a-52df-4d4a-9943-268988a37022" />
+
 
 It combines:
 
