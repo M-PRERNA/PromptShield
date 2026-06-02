@@ -2,6 +2,12 @@
 
 > AI Prompt Injection Detection & Risk Analysis Platform for LLM Applications
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_PromptShield-1e3a8a?style=for-the-badge)](https://promptshield-ygn5.onrender.com/)
+
+**Try it now:** [https://promptshield-ygn5.onrender.com/](https://promptshield-ygn5.onrender.com/)
+
+> Free tier on Render — the instance may sleep when idle; the first load can take 30–60 seconds.
+
 PromptShield is a Java + Spring Boot application designed to analyze prompts for potential prompt-injection attacks and unsafe LLM interactions.
 
 <img width="992" height="822" alt="image" src="https://github.com/user-attachments/assets/e1677065-e6e2-4dd9-9901-941d6449ece3" />
@@ -19,6 +25,23 @@ It combines:
 * Interactive web dashboard
 
 The project demonstrates clean low-level design principles and modern backend engineering patterns while solving a real-world AI security problem.
+
+---
+
+# Try sample prompts (live demo)
+
+Open [New Scan](https://promptshield-ygn5.onrender.com/scan), pick **Internal** or **External**, then click a sample below to pre-fill the prompt. Hit **Analyze Prompt** to run the assessment.
+
+| Sample | Expected risk | Try it |
+| ------ | ------------- | ------ |
+| Safe baseline | Low — should score high | [Try safe prompt](https://promptshield-ygn5.onrender.com/scan?sample=safe) |
+| Multi-attack (finance copilot) | Critical — multiple detectors | [Try critical prompt](https://promptshield-ygn5.onrender.com/scan?sample=critical) |
+| Instruction override | High | [Try override prompt](https://promptshield-ygn5.onrender.com/scan?sample=override) |
+| Secret exfiltration | Critical | [Try exfiltration prompt](https://promptshield-ygn5.onrender.com/scan?sample=exfil) |
+| Role confusion | Medium | [Try role confusion prompt](https://promptshield-ygn5.onrender.com/scan?sample=role) |
+| Delimiter smuggling | Medium | [Try delimiter prompt](https://promptshield-ygn5.onrender.com/scan?sample=delimiter) |
+
+**Security score:** 0% = highly vulnerable · 100% = ready to use (rule-based assessment).
 
 ---
 
@@ -201,6 +224,17 @@ java -jar target/promptshield.jar
 
 # Application URLs
 
+## Live (Render)
+
+| Service | URL |
+| ------- | --- |
+| Security Dashboard | [https://promptshield-ygn5.onrender.com/](https://promptshield-ygn5.onrender.com/) |
+| New Scan | [https://promptshield-ygn5.onrender.com/scan](https://promptshield-ygn5.onrender.com/scan) |
+| Scan History | [https://promptshield-ygn5.onrender.com/history](https://promptshield-ygn5.onrender.com/history) |
+| Policies | [https://promptshield-ygn5.onrender.com/policies](https://promptshield-ygn5.onrender.com/policies) |
+
+## Local development
+
 | Service          | URL                                                                                          |
 | ---------------- | -------------------------------------------------------------------------------------------- |
 | Security Dashboard | [http://localhost:8080](http://localhost:8080)                                             |
@@ -224,7 +258,7 @@ The web UI uses a Material Design 3–inspired security dashboard layout (Inter 
 2. Create a free account at [render.com](https://render.com).
 3. **New → Web Service** → connect the repo.
 4. Use the settings from [`render.yaml`](render.yaml) (Java runtime) or deploy with Docker using [`Dockerfile`](Dockerfile).
-5. Share the URL `https://<your-service>.onrender.com` (free instances sleep when idle; first load may take ~30–60s).
+5. Share the URL `https://promptshield-ygn5.onrender.com` (free instances sleep when idle; first load may take ~30–60s).
 
 Scan history on free Render uses file H2 under `/tmp` and may reset on redeploy. For persistent shared history, see [FUTURE.md](FUTURE.md) (PostgreSQL).
 

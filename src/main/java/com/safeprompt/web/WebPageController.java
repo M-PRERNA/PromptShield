@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -67,12 +68,12 @@ public class WebPageController {
     }
 
     @GetMapping("/scan")
-    public String scanForm(Model model) {
+    public String scanForm(@RequestParam(required = false) String sample, Model model) {
         WebViewSupport.addCommonModel(model, appInfoProperties, "scan");
         model.addAttribute("pageTitle", "New Scan");
         if (!model.containsAttribute("promptForm")) {
             PromptForm form = new PromptForm();
-            form.setPrompt(SAMPLE_PROMPT);
+            form.setPrompt(ScanSamplePrompts.resolve(sample, SAMPLE_PROMPT));
             model.addAttribute("promptForm", form);
         }
         return "scan";

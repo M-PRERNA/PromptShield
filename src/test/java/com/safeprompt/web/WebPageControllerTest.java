@@ -64,6 +64,13 @@ class WebPageControllerTest {
     }
 
     @Test
+    void scanPageLoadsSamplePromptFromQueryParam() throws Exception {
+        mockMvc.perform(get("/scan").param("sample", "safe"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("customer support assistant for Acme Corp")));
+    }
+
+    @Test
     void rendersPoliciesPage() throws Exception {
         mockMvc.perform(get("/policies"))
                 .andExpect(status().isOk())
