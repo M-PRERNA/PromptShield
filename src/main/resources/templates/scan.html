@@ -36,6 +36,7 @@
 
             <div th:if="${report != null}" style="margin-top: 24px;" th:insert="~{fragments/report :: report(${report})}"></div>
         </main>
+        <footer th:replace="~{fragments/site-footer :: siteFooter}"></footer>
     </div>
 </div>
 <script th:src="@{/dashboard.js}" defer></script>

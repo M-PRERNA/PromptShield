@@ -11,6 +11,7 @@
         <header th:replace="~{fragments/app-bar :: appBar}"></header>
         <main class="main-content" id="main-content" th:replace="${content}">
         </main>
+        <footer th:replace="~{fragments/site-footer :: siteFooter}"></footer>
     </div>
 </div>
 <th:block th:replace="${extraScripts} ?: ~{}"></th:block>

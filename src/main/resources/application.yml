@@ -1,6 +1,7 @@
 app:
   name: PromptShield
   version: 1.0-SNAPSHOT
+  repository-url: https://github.com/M-PRERNA/PromptShield
 
 spring:
   datasource:

@@ -22,6 +22,7 @@ public final class WebViewSupport {
     public static void addCommonModel(Model model, AppInfoProperties appInfo, String navActive) {
         model.addAttribute("appName", appInfo.getName());
         model.addAttribute("appVersion", appInfo.getVersion());
+        model.addAttribute("repositoryUrl", appInfo.getRepositoryUrl());
         model.addAttribute("navActive", navActive);
     }
 

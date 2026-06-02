@@ -17,5 +17,8 @@ spring:
   thymeleaf:
     cache: true
 
+app:
+  repository-url: https://github.com/M-PRERNA/PromptShield
+
 server:
   port: ${PORT:8080}

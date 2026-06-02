@@ -27,7 +27,9 @@ class WebPageControllerTest {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Welcome to PromptShield")))
-                .andExpect(content().string(containsString("PromptShield")));
+                .andExpect(content().string(containsString("PromptShield")))
+                .andExpect(content().string(containsString("View on GitHub")))
+                .andExpect(content().string(containsString("https://github.com/M-PRERNA/PromptShield")));
     }
 
     @Test

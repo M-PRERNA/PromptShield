@@ -10,8 +10,7 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
-
+# Package Files
 *.jar
 *.war
 *.nar
@@ -20,13 +19,31 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# JVM crash logs
 hs_err_pid*
 replay_pid*
 
-
+# IDE / build
 .idea/
 target/
 *.iml
 out/
 .m2/
+
+# Local H2 database (scan history — never commit)
+data/
+*.mv.db
+*.trace.db
+*.lock.db
+
+# Cursor IDE context
+.cursor/
+
+# Nested clone folder (if present)
+PromptShield/
+
+# Environment & local overrides
+.env
+.env.*
+application-local.yml
+*.local.yml

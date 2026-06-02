@@ -7,6 +7,7 @@ public class AppInfoProperties {
 
     private String version = "1.0-SNAPSHOT";
     private String name = "PromptShield";
+    private String repositoryUrl = "https://github.com/M-PRERNA/PromptShield";
 
     public String getVersion() {
         return version;
@@ -22,5 +23,13 @@ public class AppInfoProperties {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRepositoryUrl() {
+        return repositoryUrl;
+    }
+
+    public void setRepositoryUrl(String repositoryUrl) {
+        this.repositoryUrl = repositoryUrl;
     }
 }
