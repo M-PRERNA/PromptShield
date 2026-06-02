@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, extraHead, extraScripts)">
+<head th:replace="~{fragments/head :: head(${pageTitle})}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments/app-bar :: appBar}"></header>
+        <main class="main-content" id="main-content" th:replace="${content}">
+        </main>
+    </div>
+</div>
+<th:block th:replace="${extraScripts} ?: ~{}"></th:block>
+<script th:src="@{/layout.js}" defer></script>
+</body>
+</html>

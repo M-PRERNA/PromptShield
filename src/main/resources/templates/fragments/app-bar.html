@@ -1,0 +1,12 @@
+<header class="app-bar" th:fragment="appBar" xmlns:th="http://www.thymeleaf.org">
+    <div class="app-bar-left">
+        <button type="button" class="menu-toggle btn-icon" id="menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+        </button>
+        <h2 class="app-bar-title" th:text="${pageTitle}">Page</h2>
+    </div>
+    <button type="button" class="btn btn-icon" id="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+        <span class="theme-icon-light" aria-hidden="true">☀</span>
+        <span class="theme-icon-dark sr-only">Dark</span>
+    </button>
+</header>

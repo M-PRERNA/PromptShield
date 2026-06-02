@@ -25,7 +25,7 @@ public class PromptSafetyController {
 
     @PostMapping("/analyze")
     public PromptScanResult analyze(@Valid @RequestBody AnalyzePromptRequest request) {
-        return promptSafetyService.analyze(request.prompt());
+        return promptSafetyService.analyze(request.prompt(), request.ecosystemOrDefault());
     }
 
     @GetMapping("/history")

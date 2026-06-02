@@ -1,0 +1,87 @@
+/* Material Design 3 semantic tokens — PromptShield */
+
+[data-theme="light"] {
+    --md-primary: #1e3a8a;
+    --md-primary-hover: #1e40af;
+    --md-on-primary: #ffffff;
+    --md-secondary: #475569;
+    --md-on-secondary: #ffffff;
+    --md-success: #2e7d32;
+    --md-on-success: #ffffff;
+    --md-warning: #ed6c02;
+    --md-on-warning: #ffffff;
+    --md-error: #d32f2f;
+    --md-on-error: #ffffff;
+    --md-background: #f8fafc;
+    --md-surface: #ffffff;
+    --md-surface-variant: #f1f5f9;
+    --md-on-surface: #0f172a;
+    --md-on-surface-muted: #475569;
+    --md-outline: #cbd5e1;
+    --md-outline-variant: #e2e8f0;
+    --md-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.06);
+    --md-focus-ring: 0 0 0 3px rgba(30, 58, 138, 0.35);
+    --md-sidebar-bg: #ffffff;
+    --md-sidebar-border: #e2e8f0;
+    --md-nav-active-bg: rgba(30, 58, 138, 0.1);
+    --md-nav-active-text: #1e3a8a;
+    --md-score-green: #2e7d32;
+    --md-score-orange: #ed6c02;
+    --md-score-red: #d32f2f;
+    --md-chip-bg: #f1f5f9;
+    --md-chip-text: #334155;
+    --md-table-header: #f8fafc;
+    --md-table-row-hover: #f1f5f9;
+}
+
+[data-theme="dark"] {
+    --md-primary: #90caf9;
+    --md-primary-hover: #64b5f6;
+    --md-on-primary: #0f172a;
+    --md-secondary: #94a3b8;
+    --md-on-secondary: #0f172a;
+    --md-success: #66bb6a;
+    --md-on-success: #0f172a;
+    --md-warning: #ffb74d;
+    --md-on-warning: #0f172a;
+    --md-error: #ef5350;
+    --md-on-error: #0f172a;
+    --md-background: #121212;
+    --md-surface: #1e1e1e;
+    --md-surface-variant: #2a2a2a;
+    --md-on-surface: #e2e8f0;
+    --md-on-surface-muted: #94a3b8;
+    --md-outline: #404040;
+    --md-outline-variant: #333333;
+    --md-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+    --md-focus-ring: 0 0 0 3px rgba(144, 202, 249, 0.4);
+    --md-sidebar-bg: #1e1e1e;
+    --md-sidebar-border: #333333;
+    --md-nav-active-bg: rgba(144, 202, 249, 0.15);
+    --md-nav-active-text: #90caf9;
+    --md-score-green: #66bb6a;
+    --md-score-orange: #ffb74d;
+    --md-score-red: #ef5350;
+    --md-chip-bg: #2a2a2a;
+    --md-chip-text: #cbd5e1;
+    --md-table-header: #2a2a2a;
+    --md-table-row-hover: #333333;
+}
+
+/* Spacing scale (8px grid) */
+:root {
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 48px;
+    --sidebar-width: 260px;
+    --app-bar-height: 64px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --font-title: 2.25rem;
+    --font-section: 1.5rem;
+    --font-card: 1.125rem;
+    --font-body: 0.9375rem;
+}

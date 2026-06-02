@@ -13,9 +13,9 @@ public interface PromptScanRepository extends JpaRepository<PromptScanEntity, Lo
     @Query("select scan.id from PromptScanEntity scan order by scan.analyzedAt desc")
     List<Long> findRecentScanIds(org.springframework.data.domain.Pageable pageable);
 
-    @EntityGraph(attributePaths = {"findings", "llmReview"})
+    @EntityGraph(attributePaths = {"findings"})
     Optional<PromptScanEntity> findById(Long id);
 
-    @EntityGraph(attributePaths = {"findings", "llmReview"})
+    @EntityGraph(attributePaths = {"findings"})
     List<PromptScanEntity> findByIdIn(Collection<Long> ids);
 }

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${pageTitle})}"></head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments/app-bar :: appBar}"></header>
+        <main class="main-content" id="main-content">
+            <p class="text-muted" style="margin-bottom: 24px;">Review persisted assessments. Filter columns, show or hide fields, and sort on desktop; cards on mobile.</p>
+
+            <section class="card" th:if="${!#lists.isEmpty(recentScans)}">
+                <div class="history-toolbar">
+                    <div class="history-toolbar-actions">
+                        <button type="button" class="btn btn-secondary" id="column-toggle-btn" aria-expanded="false" aria-controls="column-panel">
+                            Columns
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="clear-filters-btn">
+                            Clear filters
+                        </button>
+                    </div>
+                    <p class="history-result-count text-small text-muted" id="history-result-count" aria-live="polite"></p>
+                </div>
+
+                <div class="column-panel" id="column-panel" hidden>
+                    <p class="column-panel-title">Show columns</p>
+                    <div class="column-panel-options" id="column-panel-options"></div>
+                </div>
+
+                <div class="table-wrap history-table-desktop">
+                    <table class="data-table sortable-table" id="history-table" aria-label="Scan history">
+                        <thead>
+                        <tr>
+                            <th scope="col" data-column="id"><button type="button" data-sort="number">ID</button></th>
+                            <th scope="col" data-column="date"><button type="button" data-sort="date">Date</button></th>
+                            <th scope="col" data-column="ecosystem">Ecosystem</th>
+                            <th scope="col" data-column="risk"><button type="button" data-sort="text">Risk</button></th>
+                            <th scope="col" data-column="score"><button type="button" data-sort="number">Score</button></th>
+                            <th scope="col" data-column="vulnerabilities">Vulnerabilities</th>
+                            <th scope="col" data-column="preview">Preview</th>
+                            <th scope="col" data-column="actions">Actions</th>
+                        </tr>
+                        <tr class="filter-row">
+                            <th scope="col" data-column="id">
+                                <label class="sr-only" for="filter-id">Filter by ID</label>
+                                <input type="text" id="filter-id" class="column-filter" data-filter="id" placeholder="ID">
+                            </th>
+                            <th scope="col" data-column="date">
+                                <label class="sr-only" for="filter-date">Filter by date</label>
+                                <input type="text" id="filter-date" class="column-filter" data-filter="date" placeholder="Date">
+                            </th>
+                            <th scope="col" data-column="ecosystem">
+                                <label class="sr-only" for="filter-ecosystem">Filter by ecosystem</label>
+                                <select id="filter-ecosystem" class="column-filter" data-filter="ecosystem">
+                                    <option value="">All</option>
+                                    <option value="INTERNAL">Internal</option>
+                                    <option value="EXTERNAL">External</option>
+                                </select>
+                            </th>
+                            <th scope="col" data-column="risk">
+                                <label class="sr-only" for="filter-risk">Filter by risk</label>
+                                <select id="filter-risk" class="column-filter" data-filter="risk">
+                                    <option value="">All</option>
+                                    <option value="CRITICAL">Critical</option>
+                                    <option value="HIGH">High</option>
+                                    <option value="MEDIUM">Medium</option>
+                                    <option value="LOW">Low</option>
+                                </select>
+                            </th>
+                            <th scope="col" data-column="score">
+                                <label class="sr-only" for="filter-score">Filter by score</label>
+                                <input type="text" id="filter-score" class="column-filter" data-filter="score" placeholder="Score">
+                            </th>
+                            <th scope="col" data-column="vulnerabilities">
+                                <label class="sr-only" for="filter-vulnerabilities">Filter by vulnerabilities</label>
+                                <input type="text" id="filter-vulnerabilities" class="column-filter" data-filter="vulnerabilities" placeholder="Tags">
+                            </th>
+                            <th scope="col" data-column="preview">
+                                <label class="sr-only" for="filter-preview">Filter by preview</label>
+                                <input type="text" id="filter-preview" class="column-filter" data-filter="preview" placeholder="Preview">
+                            </th>
+                            <th scope="col" data-column="actions"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="scan : ${recentScans}"
+                            th:attr="data-id=${scan.id()},
+                                     data-date=${scan.analyzedAt()},
+                                     data-ecosystem=${scan.ecosystem()},
+                                     data-risk=${scan.overallRisk()},
+                                     data-score=${scan.securityScorePercent()},
+                                     data-vulnerabilities=${#strings.listJoin(scan.vulnerabilityTags(), '|')},
+                                     data-preview=${scan.promptPreview()},
+                                     data-findings=${scan.findingCount()}">
+                            <td data-column="id" th:text="${scan.id()}">1</td>
+                            <td data-column="date" th:text="${#temporals.format(scan.analyzedAt(), 'dd MMM yyyy')}">Date</td>
+                            <td data-column="ecosystem" th:text="${scan.ecosystem()}">INTERNAL</td>
+                            <td data-column="risk"><span th:replace="~{fragments/severity :: badge(${scan.overallRisk()})}"></span></td>
+                            <td data-column="score" th:text="${scan.securityScorePercent()} + '%'">Score</td>
+                            <td data-column="vulnerabilities">
+                                <div class="chips">
+                                    <span class="chip chip-hit" th:each="tag : ${scan.vulnerabilityTags()}" th:text="${tag}">Tag</span>
+                                    <span class="text-muted text-small" th:if="${#lists.isEmpty(scan.vulnerabilityTags())}">None</span>
+                                </div>
+                            </td>
+                            <td data-column="preview" th:text="${scan.promptPreview()}">Preview</td>
+                            <td data-column="actions" class="history-actions">
+                                <a th:href="@{/history/{id}(id=${scan.id()})}">View</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="history-cards-mobile">
+                    <article class="history-mobile-card" th:each="scan : ${recentScans}"
+                             th:attr="data-id=${scan.id()},
+                                      data-date=${scan.analyzedAt()},
+                                      data-ecosystem=${scan.ecosystem()},
+                                      data-risk=${scan.overallRisk()},
+                                      data-score=${scan.securityScorePercent()},
+                                      data-vulnerabilities=${#strings.listJoin(scan.vulnerabilityTags(), '|')},
+                                      data-preview=${scan.promptPreview()}">
+                        <div class="history-mobile-card-header">
+                            <strong th:text="'#' + ${scan.id()}">#1</strong>
+                            <span th:replace="~{fragments/severity :: badge(${scan.overallRisk()})}"></span>
+                        </div>
+                        <p class="text-small text-muted" th:text="${#temporals.format(scan.analyzedAt(), 'dd MMM yyyy')} + ' • ' + ${scan.ecosystem()}">Meta</p>
+                        <p class="history-mobile-score" th:text="'Security score: ' + ${scan.securityScorePercent()} + '%'">Score</p>
+                        <div class="chips">
+                            <span class="chip chip-hit" th:each="tag : ${scan.vulnerabilityTags()}" th:text="${tag}">Tag</span>
+                        </div>
+                        <p class="text-small" th:text="${scan.promptPreview()}">Preview</p>
+                        <a th:href="@{/history/{id}(id=${scan.id()})}">View report</a>
+                    </article>
+                </div>
+
+                <p class="empty-state history-no-results" id="history-no-results" hidden>
+                    No scans match the current filters. <button type="button" class="btn-link" id="clear-filters-inline">Clear filters</button>
+                </p>
+            </section>
+
+            <p class="empty-state card" th:if="${#lists.isEmpty(recentScans)}">
+                No scans saved yet. <a th:href="@{/scan}">Run your first assessment</a>.
+            </p>
+        </main>
+    </div>
+</div>
+<script th:src="@{/history.js}" defer></script>
+<script th:src="@{/table.js}" defer></script>
+<script th:src="@{/layout.js}" defer></script>
+</body>
+</html>

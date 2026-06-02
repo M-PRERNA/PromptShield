@@ -1,0 +1,9 @@
+<section class="card owl-insight" th:fragment="owlInsight(insight)" xmlns:th="http://www.thymeleaf.org" aria-labelledby="owl-title">
+    <div class="owl-insight-inner">
+        <div class="owl-icon" aria-hidden="true">🦉</div>
+        <div>
+            <h2 id="owl-title" class="card-title">Security insight</h2>
+            <p th:text="${insight.message()}">Insight message</p>
+        </div>
+    </div>
+</section>

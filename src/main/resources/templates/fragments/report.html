@@ -1,0 +1,55 @@
+<section class="card report-block" th:fragment="report(report)" xmlns:th="http://www.thymeleaf.org" th:if="${report != null}">
+    <div class="card-header">
+        <div>
+            <p class="text-muted text-small">Target ecosystem</p>
+            <p class="card-title" th:text="${report.ecosystem()}">INTERNAL</p>
+            <p class="text-muted text-small" style="margin-top: 8px;">Overall risk</p>
+            <div th:replace="~{fragments/severity :: badge(${report.overallRisk()})}"></div>
+            <p class="text-muted text-small" style="margin-top: 8px;"
+               th:text="'Scan #' + ${report.id()} + ' • ' + ${#temporals.format(report.analyzedAt(), 'dd MMM yyyy HH:mm')}">Scan metadata</p>
+        </div>
+        <div class="score-panel">
+            <div class="score-ring-wrap" th:attr="data-security-score=${securityScore}">
+                <svg class="score-ring" viewBox="0 0 120 120" aria-hidden="true">
+                    <circle class="score-ring-bg" cx="60" cy="60" r="52"></circle>
+                    <circle class="score-ring-fill" cx="60" cy="60" r="52"
+                            pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"></circle>
+                </svg>
+                <div class="score-ring-center">
+                    <span class="score-ring-value" th:text="${securityScore} + '%'">0%</span>
+                    <span class="score-ring-label">Security Score</span>
+                </div>
+            </div>
+            <p class="score-helper text-small text-muted">0% = highly vulnerable · 100% = ready to use</p>
+        </div>
+    </div>
+
+    <div class="table-wrap" th:if="${!#lists.isEmpty(report.findings())}">
+        <table class="data-table" aria-label="Vulnerabilities">
+            <thead>
+            <tr>
+                <th scope="col">Standard</th>
+                <th scope="col">Category</th>
+                <th scope="col">Severity</th>
+                <th scope="col">Finding</th>
+                <th scope="col">Recommendation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="finding : ${report.findings()}">
+                <td th:text="${finding.standardRef()}">OWASP</td>
+                <td>
+                    <span class="chip chip-hit" th:text="${finding.vulnerabilityTag()}">Tag</span>
+                    <span class="text-small text-muted" th:text="${finding.detectorName()}">Detector</span>
+                </td>
+                <td><span th:replace="~{fragments/severity :: badge(${finding.severity()})}"></span></td>
+                <td th:text="${finding.message()}">Finding</td>
+                <td th:text="${finding.remediation()}">Recommendation</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p class="empty-state" th:if="${#lists.isEmpty(report.findings())}">
+        No OWASP-aligned vulnerability patterns were detected. Your prompt scored well against the active policy.
+    </p>
+</section>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${pageTitle})}"></head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments/app-bar :: appBar}"></header>
+        <main class="main-content" id="main-content">
+            <p class="text-muted" style="margin-bottom: 24px;">Active detection policies mapped to OWASP Top 10 for LLM Applications.</p>
+
+            <article class="card policy-card" th:each="policy : ${detectorPolicies}">
+                <div class="card-header">
+                    <div>
+                        <h3 class="card-title" th:text="${policy.name}">Detector</h3>
+                        <p class="text-muted text-small" th:text="'ID: ' + ${policy.id}">id</p>
+                        <p class="text-small" style="margin-top: 8px;"
+                           th:if="${vulnerabilityCatalog.entriesByRuleId().containsKey(policy.id)}"
+                           th:text="'Standard: ' + ${vulnerabilityCatalog.entriesByRuleId().get(policy.id).standardRef()}">OWASP</p>
+                    </div>
+                    <span th:replace="~{fragments/severity :: badgeText(${policy.severity})}"></span>
+                </div>
+                <p th:text="${policy.remediation}" style="margin: 12px 0;">Remediation</p>
+                <p class="patterns" th:text="'Patterns: ' + ${#strings.listJoin(policy.patterns, ', ')}">Patterns</p>
+            </article>
+        </main>
+    </div>
+</div>
+<script th:src="@{/layout.js}" defer></script>
+</body>
+</html>

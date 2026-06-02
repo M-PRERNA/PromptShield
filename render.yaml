@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: promptshield
+    runtime: java
+    plan: free
+    buildCommand: mvn -DskipTests clean package
+    startCommand: java -jar target/prompt-injection-tester-1.0-SNAPSHOT.jar --spring.profiles.active=prod
+    healthCheckPath: /
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PROMPTSHIELD_DB_PATH
+        value: /tmp/data/safeprompt-db

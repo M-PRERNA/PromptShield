@@ -1,5 +1,6 @@
 package com.safeprompt.persistence;
 
+import com.safeprompt.model.PromptEcosystem;
 import com.safeprompt.model.RiskLevel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,6 +15,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
+import jakarta.persistence.PostLoad;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -40,6 +42,10 @@ public class PromptScanEntity {
     @Column(nullable = false)
     private int riskScore;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 32)
+    private PromptEcosystem ecosystem = PromptEcosystem.INTERNAL;
+
     @Column(nullable = false, updatable = false)
     private Instant analyzedAt;
 
@@ -47,12 +53,22 @@ public class PromptScanEntity {
     @OrderBy("sortOrder ASC")
     private final List<PromptFindingEntity> findings = new ArrayList<>();
 
-    @OneToOne(mappedBy = "scan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "scan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private PromptLlmReviewEntity llmReview;
 
     @PrePersist
     void onCreate() {
         analyzedAt = Instant.now();
+        if (ecosystem == null) {
+            ecosystem = PromptEcosystem.INTERNAL;
+        }
+    }
+
+    @PostLoad
+    void onLoad() {
+        if (ecosystem == null) {
+            ecosystem = PromptEcosystem.INTERNAL;
+        }
     }
 
     public void addFinding(PromptFindingEntity finding) {
@@ -93,6 +109,14 @@ public class PromptScanEntity {
 
     public void setRiskScore(int riskScore) {
         this.riskScore = riskScore;
+    }
+
+    public PromptEcosystem getEcosystem() {
+        return ecosystem == null ? PromptEcosystem.INTERNAL : ecosystem;
+    }
+
+    public void setEcosystem(PromptEcosystem ecosystem) {
+        this.ecosystem = ecosystem == null ? PromptEcosystem.INTERNAL : ecosystem;
     }
 
     public Instant getAnalyzedAt() {

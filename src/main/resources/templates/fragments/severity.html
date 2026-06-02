@@ -1,0 +1,13 @@
+<span th:fragment="badge(level)" xmlns:th="http://www.thymeleaf.org"
+      th:class="${'severity severity-' + #strings.toLowerCase(level.name())}"
+      th:attr="aria-label=${'Severity: ' + level}">
+    <span aria-hidden="true">●</span>
+    <span th:text="'[' + ${level} + ']'">[MEDIUM]</span>
+</span>
+
+<span th:fragment="badgeText(severity)" xmlns:th="http://www.thymeleaf.org"
+      th:class="${'severity severity-' + #strings.toLowerCase(severity)}"
+      th:attr="aria-label=${'Severity: ' + severity}">
+    <span aria-hidden="true">●</span>
+    <span th:text="'[' + ${severity} + ']'">[MEDIUM]</span>
+</span>

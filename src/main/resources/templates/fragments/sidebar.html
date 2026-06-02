@@ -1,0 +1,28 @@
+<aside class="sidebar" id="sidebar" th:fragment="sidebar" xmlns:th="http://www.thymeleaf.org" aria-label="Main navigation">
+    <div class="sidebar-brand">
+        <h1 th:text="${appName}">PromptShield</h1>
+        <p class="sidebar-version" th:text="'v' + ${appVersion}">v1.0-SNAPSHOT</p>
+    </div>
+    <nav class="sidebar-nav">
+        <ul>
+            <li>
+                <a th:href="@{/}" th:classappend="${navActive == 'dashboard'} ? 'active' : ''">Dashboard</a>
+            </li>
+            <li>
+                <a th:href="@{/scan}" th:classappend="${navActive == 'scan'} ? 'active' : ''">New Scan</a>
+            </li>
+            <li>
+                <a th:href="@{/history}" th:classappend="${navActive == 'history'} ? 'active' : ''">Scan History</a>
+            </li>
+            <li>
+                <a th:href="@{/policies}" th:classappend="${navActive == 'policies'} ? 'active' : ''">Policies</a>
+            </li>
+            <li>
+                <a th:href="@{/reports}" th:classappend="${navActive == 'reports'} ? 'active' : ''">Reports</a>
+            </li>
+            <li>
+                <a th:href="@{/settings}" th:classappend="${navActive == 'settings'} ? 'active' : ''">Settings</a>
+            </li>
+        </ul>
+    </nav>
+</aside>

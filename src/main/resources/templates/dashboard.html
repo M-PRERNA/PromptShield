@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${pageTitle})}"></head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments/app-bar :: appBar}"></header>
+        <main class="main-content" id="main-content">
+            <section class="card welcome-banner">
+                <h1 class="page-title">Welcome to PromptShield</h1>
+                <p class="text-muted">Assess system and assistant prompts for your internal or external AI ecosystem before production—aligned with OWASP LLM security guidance.</p>
+                <p style="margin-top: 16px;">
+                    <a class="btn btn-primary" th:href="@{/scan}">Analyze a prompt</a>
+                </p>
+            </section>
+
+            <div th:replace="~{fragments/owl-insight :: owlInsight(${owlInsight})}" style="margin-top: 24px;"></div>
+
+            <div class="kpi-grid" role="region" aria-label="Risk summary" style="margin-top: 24px;">
+                <a class="kpi-card kpi-card-link primary" th:href="@{/history}" aria-label="View all scans in history">
+                    <div class="kpi-value" th:text="${stats.totalScans() > 0 ? stats.averageSecurityScorePercent() + '%' : '—'}">—</div>
+                    <div class="kpi-label">Avg. Security Score</div>
+                </a>
+                <a class="kpi-card kpi-card-link critical" th:href="@{/history(risk='CRITICAL')}" aria-label="View critical risk scans in history">
+                    <div class="kpi-value" th:text="${stats.criticalCount()}">0</div>
+                    <div class="kpi-label">Critical</div>
+                </a>
+                <a class="kpi-card kpi-card-link warning" th:href="@{/history(risk='MEDIUM,HIGH')}" aria-label="View medium and high risk scans in history">
+                    <div class="kpi-value" th:text="${stats.mediumCount() + stats.highCount()}">0</div>
+                    <div class="kpi-label">Medium / High</div>
+                </a>
+                <a class="kpi-card kpi-card-link success" th:href="@{/history(risk='LOW')}" aria-label="View low risk scans in history">
+                    <div class="kpi-value" th:text="${stats.lowCount()}">0</div>
+                    <div class="kpi-label">Low</div>
+                </a>
+            </div>
+
+            <section class="card chart-section" style="margin-top: 24px;" aria-labelledby="score-chart-title">
+                <div class="chart-section-header">
+                    <h2 id="score-chart-title" class="section-title">Security Score Over Time</h2>
+                    <p class="chart-summary text-muted" th:if="${chartTrend != null and !#lists.isEmpty(trendPoints)}">
+                        Latest: <strong th:text="${chartTrend.latestScore() + '%'}">0%</strong>
+                        · Avg: <strong th:text="${chartTrend.averageScore() + '%'}">0%</strong>
+                        · Trend:
+                        <strong>
+                            <span th:text="${chartTrend.trendArrow()}">→</span>
+                            <span th:text="${chartTrend.trendLabel()}">stable</span>
+                        </strong>
+                    </p>
+                </div>
+                <div class="chart-container" th:if="${!#lists.isEmpty(trendPoints)}">
+                    <canvas id="scoreTrendChart" aria-label="Security score trend chart"
+                            th:attr="data-labels=${#strings.listJoin(trendPoints.![label], '|')},
+                                     data-scores=${#strings.listJoin(trendPoints.![securityScore], '|')},
+                                     data-scan-ids=${#strings.listJoin(trendPoints.![scanId], '|')},
+                                     data-risks=${#strings.listJoin(trendPoints.![riskLevel], '|')}"></canvas>
+                </div>
+                <p class="empty-state" th:if="${#lists.isEmpty(recentScans)}" style="margin-top: 16px;">
+                    Run a scan to populate the trend chart.
+                </p>
+            </section>
+        </main>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+<script th:src="@{/dashboard.js}" defer></script>
+<script th:src="@{/layout.js}" defer></script>
+</body>
+</html>

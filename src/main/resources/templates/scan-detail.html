@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${pageTitle})}"></head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments/app-bar :: appBar}"></header>
+        <main class="main-content" id="main-content">
+            <p style="margin-bottom: 16px;"><a th:href="@{/history}">← Back to history</a></p>
+
+            <section class="card">
+                <div class="scan-detail-meta">
+                    <span th:replace="~{fragments/severity :: badge(${report.overallRisk()})}"></span>
+                    <span class="text-muted" th:text="'Scan #' + ${report.id()} + ' • ' + ${report.ecosystem()} + ' • ' + ${#temporals.format(report.analyzedAt(), 'dd MMM yyyy HH:mm')}">Meta</span>
+                </div>
+                <h2 class="section-title" style="margin: 16px 0 8px;">Prompt</h2>
+                <pre class="prompt-preview" th:text="${report.prompt()}">Prompt</pre>
+            </section>
+
+            <div style="margin-top: 24px;" th:insert="~{fragments/report :: report(${report})}"></div>
+
+            <section class="card" style="margin-top: 24px;" th:if="${recommendations != null and !#lists.isEmpty(recommendations)}">
+                <h2 class="section-title">Recommendations</h2>
+                <ul class="recommendations-list">
+                    <li th:each="rec : ${recommendations}" th:text="${rec}">Recommendation</li>
+                </ul>
+            </section>
+
+            <section class="card" style="margin-top: 24px;">
+                <h2 class="section-title">Attack Surface</h2>
+                <div class="chips">
+                    <span class="chip chip-hit" th:each="rule : ${attackSurfaceRules}" th:text="${rule}">rule</span>
+                    <span class="text-muted" th:if="${attackSurfaceRules == null or attackSurfaceRules.isEmpty()}">No rules triggered.</span>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+<script th:src="@{/dashboard.js}" defer></script>
+<script th:src="@{/layout.js}" defer></script>
+</body>
+</html>

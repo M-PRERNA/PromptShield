@@ -201,11 +201,34 @@ java -jar target/promptshield.jar
 
 # Application URLs
 
-| Service     | URL                                                                                          |
-| ----------- | -------------------------------------------------------------------------------------------- |
-| Web UI      | [http://localhost:8080](http://localhost:8080)                                               |
-| H2 Console  | [http://localhost:8080/h2-console](http://localhost:8080/h2-console)                         |
-| Analyze API | [http://localhost:8080/api/v1/prompts/analyze](http://localhost:8080/api/v1/prompts/analyze) |
+| Service          | URL                                                                                          |
+| ---------------- | -------------------------------------------------------------------------------------------- |
+| Security Dashboard | [http://localhost:8080](http://localhost:8080)                                             |
+| New Scan         | [http://localhost:8080/scan](http://localhost:8080/scan)                                   |
+| Scan History     | [http://localhost:8080/history](http://localhost:8080/history)                               |
+| Policies         | [http://localhost:8080/policies](http://localhost:8080/policies)                             |
+| H2 Console       | [http://localhost:8080/h2-console](http://localhost:8080/h2-console)                         |
+| Analyze API      | [http://localhost:8080/api/v1/prompts/analyze](http://localhost:8080/api/v1/prompts/analyze) |
+
+The web UI uses a Material Design 3–inspired security dashboard layout (Inter typography, light/dark theme toggle, OWASP-aligned vulnerability reports, and scan trend chart).
+
+**Security score:** 0% = highly vulnerable, 100% = ready to use (rule-based assessment, no LLM second pass in this MVP).
+
+---
+
+# Deploy MVP (Render — free tier)
+
+**Install locally:** Java 17, Maven 3.9+, Git. **Not required for v1:** MongoDB, vector DB, OpenAI API key.
+
+1. Push this repository to GitHub.
+2. Create a free account at [render.com](https://render.com).
+3. **New → Web Service** → connect the repo.
+4. Use the settings from [`render.yaml`](render.yaml) (Java runtime) or deploy with Docker using [`Dockerfile`](Dockerfile).
+5. Share the URL `https://<your-service>.onrender.com` (free instances sleep when idle; first load may take ~30–60s).
+
+Scan history on free Render uses file H2 under `/tmp` and may reset on redeploy. For persistent shared history, see [FUTURE.md](FUTURE.md) (PostgreSQL).
+
+**Quick local share:** `mvn spring-boot:run` then `ngrok http 8080`.
 
 ---
 

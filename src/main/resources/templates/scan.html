@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${pageTitle})}"></head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+<div class="app-shell">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main-wrapper">
+        <header th:replace="~{fragments/app-bar :: appBar}"></header>
+        <main class="main-content" id="main-content">
+            <p class="text-muted" style="margin-bottom: 24px;">Paste a prompt your team designed for an internal or external AI assistant. PromptShield checks it against OWASP-aligned injection and leakage patterns.</p>
+
+            <section class="card scan-layout">
+                <form th:action="@{/scan}" th:object="${promptForm}" method="post">
+                    <fieldset class="form-group ecosystem-field">
+                        <legend class="form-label">AI ecosystem</legend>
+                        <label class="radio-option">
+                            <input type="radio" th:field="*{ecosystem}" value="INTERNAL">
+                            Internal (employees, internal tools)
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" th:field="*{ecosystem}" value="EXTERNAL">
+                            External (customer-facing products)
+                        </label>
+                    </fieldset>
+                    <div class="form-group">
+                        <label class="form-label" for="prompt">Prompt under assessment</label>
+                        <textarea id="prompt" class="form-textarea" th:field="*{prompt}" rows="12"
+                                  placeholder="Paste your system prompt or assistant instructions..."></textarea>
+                        <p class="form-error" th:if="${#fields.hasErrors('prompt')}" th:errors="*{prompt}"></p>
+                    </div>
+                    <button type="submit" class="btn btn-primary scan-submit">Analyze Prompt</button>
+                </form>
+            </section>
+
+            <div th:if="${report != null}" style="margin-top: 24px;" th:insert="~{fragments/report :: report(${report})}"></div>
+        </main>
+    </div>
+</div>
+<script th:src="@{/dashboard.js}" defer></script>
+<script th:src="@{/layout.js}" defer></script>
+</body>
+</html>
